@@ -4,7 +4,7 @@
   "private": true,
   "main": "electron/main.js",
   "repository": {
-    "url": "https://github.com/BitHighlander/web-keepkey-client"
+    "url": "https://github.com/keepkey/keepkey-client"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.1",

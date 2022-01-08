@@ -10,6 +10,7 @@ import React, {
   useMemo,
   useReducer
 } from 'react'
+import { useModal } from 'context/ModalProvider/ModalProvider'
 
 import { KeyManager, SUPPORTED_WALLETS } from './config'
 import { useKeepKeyEventHandler } from './KeepKey/hooks/useKeepKeyEventHandler'
@@ -147,6 +148,7 @@ const reducer = (state: InitialState, action: ActionTypes) => {
 const WalletContext = createContext<IWalletContext | null>(null)
 
 export const WalletProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
+  const { sign } = useModal()
   const [state, dispatch] = useReducer(reducer, initialState)
   useKeyringEventHandler(state)
   useKeepKeyEventHandler(state, dispatch)
@@ -186,7 +188,11 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }): JSX
   useEffect(() => {
     console.log('onStartApp: CHECKPOINT')
     ipcRenderer.send('onStartApp', {})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // we explicitly only want this to happen once
 
+  //sub Events
+  useEffect(() => {
     //listen to events on main
     ipcRenderer.on('hardware', (event, data) => {
       //event
@@ -243,10 +249,26 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }): JSX
       console.log('setDevice', data)
     })
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) // we explicitly only want this to happen once
+    ipcRenderer.on('signTx', async (event, data) => {
+      console.log('signTransaction', data.payload.data.HDwalletPayload)
+      //open signTx
+      sign.open(data.payload.data)
 
-  //onStart()
+      //send to wallet
+
+      if (state.wallet) {
+        console.log(state.wallet)
+        // @ts-ignore
+        let respSign = await state.wallet.cosmosSignTx(data.payload.data.HDwalletPayload)
+        console.log('respSign:', respSign)
+      } else {
+        console.error('Wallet not init! can not sign!')
+      }
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.wallet]) // we explicitly only want this to happen once
+
+  //connect()
   const connect = useCallback(
     async (type: KeyManager) => {
       console.log('WalletProvider Connect: ', type)

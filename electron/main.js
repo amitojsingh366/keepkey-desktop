@@ -311,7 +311,21 @@ const start_bridge = async function (event) {
       event.sender.send('setKeepKeyStatus', { status: STATUS })
 
       let API_PORT = process.env['API_PORT_BRIDGE'] || '1646'
-      //bridge
+
+      /*
+          KeepKey bridge
+
+          TODO: swagger spec
+            host swaggerUI for devs
+
+          endpoints:
+            raw i/o keepkey bridge:
+            status:
+            pubkeys:
+            sign:
+
+
+       */
       appExpress.all('/exchange/device', async function (req, res, next) {
         try {
           if (req.method === 'GET') {
@@ -333,6 +347,41 @@ const start_bridge = async function (event) {
             res.status(200).json({})
           } else {
             throw Error('unhandled')
+          }
+          next()
+        } catch (e) {
+          throw e
+        }
+      })
+
+      //status
+      appExpress.all('/status', async function (req, res, next) {
+        try {
+          if (req.method === 'GET') {
+            res.status(200).json({
+              success: true,
+              status: STATUS,
+              state: STATE
+            })
+          }
+          next()
+        } catch (e) {
+          throw e
+        }
+      })
+
+      //TODO pubkeys
+
+      //sign
+      appExpress.all('/sign', async function (req, res, next) {
+        try {
+          console.log("checkpoint1: ")
+          if (req.method === 'POST') {
+            let body = req.body
+            console.log("body: ",body)
+            event.sender.send('signTx', { payload: body })
+            //TODO hold till signed
+            //res.status(200).json({ success: true, status: 'submitted' })
           }
           next()
         } catch (e) {
@@ -387,7 +436,7 @@ const stop_bridge = async function (event) {
       STATUS = 'device connected'
       event.sender.send('setKeepKeyState', { state: STATE })
       event.sender.send('setKeepKeyStatus', { status: STATUS })
-      // updateMenu(STATE)
+      updateMenu(STATE)
     })
   } catch (e) {
     log.error(e)

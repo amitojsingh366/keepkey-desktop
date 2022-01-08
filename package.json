@@ -59,6 +59,7 @@
     "envalid": "^7.2.1",
     "express": "^4.17.1",
     "framer-motion": "^4",
+    "keccak256": "^1.0.6",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "match-sorter": "^6.3.0",
@@ -86,6 +87,7 @@
     "redux-persist": "^6.0.0",
     "scrypt-js": "^3.0.1",
     "vertx": "^0.0.1-security",
+    "wait-promise": "^0.4.1",
     "web-vitals": "^2.1.0",
     "web3": "^1.6.0",
     "webusb": "^2.2.0"

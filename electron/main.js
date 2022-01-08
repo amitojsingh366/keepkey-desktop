@@ -55,6 +55,8 @@ appExpress.use(bodyParser.urlencoded({ extended: false }))
 appExpress.use(bodyParser.json())
 const path = require('path')
 const isDev = require('electron-is-dev')
+let wait = require('wait-promise');
+let sleep = wait.sleep;
 let server = {}
 let tray = {}
 let STATE = 0
@@ -63,7 +65,7 @@ let eventIPC = {}
 
 const assetsDirectory = path.join(__dirname, 'assets')
 const EVENT_LOG = []
-
+let SIGNED_TX = null
 /*
     Electron Settings
  */
@@ -272,6 +274,19 @@ app.on('before-quit', () => {
   isQuitting = true
 })
 
+ipcMain.on('onSignedTx', async (event,data) => {
+  const tag = TAG + ' | onSignedTx | '
+  try {
+    log.info(tag, 'event: onSignedTx: ', data)
+    console.log("onSignedTx: ",data)
+    SIGNED_TX = data
+  } catch (e) {
+    log.error('e: ', e)
+    log.error(tag, e)
+  }
+})
+
+
 /*
 
   KeepKey Status codes
@@ -381,7 +396,10 @@ const start_bridge = async function (event) {
             console.log("body: ",body)
             event.sender.send('signTx', { payload: body })
             //TODO hold till signed
-            //res.status(200).json({ success: true, status: 'submitted' })
+            while(!SIGNED_TX){
+              await sleep(300)
+            }
+            res.status(200).json({ success: true, status: 'signed', signedTx:SIGNED_TX })
           }
           next()
         } catch (e) {

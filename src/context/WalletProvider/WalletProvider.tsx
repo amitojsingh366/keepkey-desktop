@@ -1,7 +1,9 @@
 import { ComponentWithAs, IconProps } from '@chakra-ui/react'
 import { HDWallet, Keyring } from '@shapeshiftoss/hdwallet-core'
 import { getConfig } from 'config'
+import cryptoTools from 'crypto'
 import { ipcRenderer } from 'electron'
+import keccak256 from 'keccak256'
 import React, {
   createContext,
   useCallback,
@@ -251,6 +253,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }): JSX
 
     ipcRenderer.on('signTx', async (event, data) => {
       console.log('signTransaction', data.payload.data.HDwalletPayload)
+      let unsignedTx = data.payload.data
       //open signTx
       sign.open(data.payload.data)
 
@@ -258,9 +261,81 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }): JSX
 
       if (state.wallet) {
         console.log(state.wallet)
-        // @ts-ignore
-        let respSign = await state.wallet.cosmosSignTx(data.payload.data.HDwalletPayload)
-        console.log('respSign:', respSign)
+
+        let signedTx
+        let broadcastString
+        let buffer
+        let txid
+        switch (unsignedTx.network) {
+          case 'RUNE':
+            // @ts-ignore
+            signedTx = await state.wallet.thorchainSignTx(unsignedTx.HDwalletPayload)
+
+            broadcastString = {
+              tx: signedTx,
+              type: 'cosmos-sdk/StdTx',
+              mode: 'sync'
+            }
+            buffer = Buffer.from(JSON.stringify(broadcastString), 'base64')
+            txid = cryptoTools.createHash('sha256').update(buffer).digest('hex').toUpperCase()
+
+            signedTx.serialized = JSON.stringify(broadcastString)
+            signedTx.txid = txid
+            break
+          case 'ATOM':
+            // @ts-ignore
+            signedTx = await state.wallet.cosmosSignTx(unsignedTx.HDwalletPayload)
+            broadcastString = {
+              tx: signedTx,
+              type: 'cosmos-sdk/StdTx',
+              mode: 'sync'
+            }
+            console.log('signedTx: ', signedTx)
+            buffer = Buffer.from(JSON.stringify(broadcastString), 'base64')
+            //TODO FIXME
+            txid = cryptoTools.createHash('sha256').update(buffer).digest('hex').toUpperCase()
+
+            signedTx.serialized = JSON.stringify(broadcastString)
+            signedTx.txid = txid
+            break
+          case 'OSMO':
+            // @ts-ignore
+            signedTx = await state.wallet.osmosisSignTx(unsignedTx.HDwalletPayload)
+            broadcastString = {
+              tx: signedTx,
+              type: 'cosmos-sdk/StdTx',
+              mode: 'sync'
+            }
+            buffer = Buffer.from(JSON.stringify(broadcastString), 'base64')
+            //TODO FIXME
+            txid = cryptoTools.createHash('sha256').update(buffer).digest('hex').toUpperCase()
+            signedTx.txid = txid
+            signedTx.serialized = JSON.stringify(broadcastString)
+            break
+          case 'ETH':
+            // @ts-ignore
+            signedTx = await state.wallet.ethSignTx(unsignedTx.HDwalletPayload)
+            txid = keccak256(signedTx.serialized).toString('hex')
+            signedTx.txid = txid
+            break
+          case 'BTC':
+          case 'BCH':
+          case 'LTC':
+          case 'DOGE':
+          case 'DASH':
+          case 'DGB':
+          case 'RDD':
+            // @ts-ignore
+            signedTx = await state.wallet.btcSignTx(unsignedTx.HDwalletPayload)
+            break
+          default:
+            throw Error('network not supported! ' + unsignedTx.network)
+        }
+        console.log('onSignedTx: ', signedTx)
+        ipcRenderer.send('onSignedTx', signedTx)
+
+        //broadcast signedTx
+        //return to main
       } else {
         console.error('Wallet not init! can not sign!')
       }

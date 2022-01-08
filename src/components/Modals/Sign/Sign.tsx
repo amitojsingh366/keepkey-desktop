@@ -17,32 +17,18 @@ import { Text } from 'components/Text'
 import { useModal } from 'context/ModalProvider/ModalProvider'
 
 export const SignModal = (input: any) => {
-  const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [error] = useState<string | null>(null)
+  const [loading] = useState(false)
   const { sign } = useModal()
   const { close, isOpen } = sign
 
   const inputRef = useRef<HTMLInputElement | null>(null)
   const invocationId = input.invocationId
-  const unsignedTx = input
   const HDwalletPayload = input.HDwalletPayload
 
-  const handleSubmit = async () => {
-    setLoading(true)
-    try {
-      console.log('Approve sign! ', unsignedTx)
-      if (unsignedTx) {
-        //hook?
-        //broadcast
-        // let broadcastResult = await pioneer.App.broadcast(unsignedTx.network, signedTx)
-        // console.log('broadcastResult: ', broadcastResult)
-      }
-    } catch (e) {
-      setError('modals.connect.error')
-    }
-    setLoading(false)
-  }
+  const HandleSubmit = async () => {}
 
+  // @ts-ignore
   return (
     <Modal
       isOpen={isOpen}
@@ -85,7 +71,7 @@ export const SignModal = (input: any) => {
             isFullWidth
             size='lg'
             colorScheme='blue'
-            onClick={handleSubmit}
+            onClick={HandleSubmit}
             disabled={loading}
           >
             <Text translation={'modals.sign.sign'} />

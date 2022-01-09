@@ -395,11 +395,12 @@ const start_bridge = async function (event) {
             let body = req.body
             console.log("body: ",body)
             event.sender.send('signTx', { payload: body })
-            //TODO hold till signed
+            //hold till signed
             while(!SIGNED_TX){
               await sleep(300)
             }
             res.status(200).json({ success: true, status: 'signed', signedTx:SIGNED_TX })
+            SIGNED_TX = null
           }
           next()
         } catch (e) {

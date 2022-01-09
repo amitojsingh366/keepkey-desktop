@@ -197,23 +197,17 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }): JSX
   useEffect(() => {
     //listen to events on main
     ipcRenderer.on('hardware', (event, data) => {
-      //event
-      //console.log('hardware event: ', data)
-
       switch (data.event.event) {
         case 'connect':
           console.log('connect')
-          // playSound('success')
-          // code block
+          playSound('success')
           break
         case 'disconnect':
           console.log('disconnect')
-          //playSound('fail')
-
-          // code block
+          playSound('fail')
           break
         default:
-        //TODO Spammy
+        //Spammy
         //console.log("unhandled event! ",data.event)
       }
     })
@@ -249,6 +243,10 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }): JSX
 
     ipcRenderer.on('setDevice', (event, data) => {
       console.log('setDevice', data)
+    })
+
+    ipcRenderer.on('getPubkeys', (event, data) => {
+      console.log('getPubkeys', data)
     })
 
     ipcRenderer.on('signTx', async (event, data) => {

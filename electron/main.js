@@ -211,8 +211,8 @@ function createWindow() {
       }
       kkAutoLauncher.enable()
     })
-    .catch(function () {
-      log.error('failed to enable auto launch: ', kkAutoLauncher)
+    .catch(function (e) {
+      log.error('failed to enable auto launch: ', e)
     })
 
   /**
@@ -220,8 +220,8 @@ function createWindow() {
    *
    * more options: https://www.electronjs.org/docs/api/browser-window
    */
-  let mainWindow = new BrowserWindow({
-    width: 460,
+  mainWindow = new BrowserWindow({
+    width: 1460,
     height: 780,
     show: false,
     backgroundColor: 'white',
@@ -231,6 +231,10 @@ function createWindow() {
       devTools: true
     }
   })
+
+  //TODO remove/ flag on dev
+  mainWindow.openDevTools()
+
   const startURL = isDev
     ? 'http://localhost:3000'
     : `file://${path.join(__dirname, '../build/index.html')}`

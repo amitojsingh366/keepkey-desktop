@@ -274,6 +274,9 @@ module.exports = {
         : {}
     )
 
+    //patch for electron
+    config.target = 'electron-renderer'
+
     return config
   },
   devServer: configFunction => {

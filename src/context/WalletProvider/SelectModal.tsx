@@ -1,5 +1,5 @@
 import { Button, Center, Flex, ModalBody, ModalHeader, Stack, Tag } from '@chakra-ui/react'
-import { useTranslate } from 'react-polyglot'
+// import { useTranslate } from 'react-polyglot'
 import { RawText, Text } from 'components/Text'
 
 import { SUPPORTED_WALLETS } from './config'
@@ -10,7 +10,7 @@ export const SelectModal = () => {
     state: { adapters, walletInfo },
     connect
   } = useWallet()
-  const translate = useTranslate()
+  // const translate = useTranslate()
 
   return (
     <>

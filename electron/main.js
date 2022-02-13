@@ -388,7 +388,17 @@ ipcMain.on('onAccountInfo', async (event,data) => {
   try {
     console.log("data: ",data)
     if(data.length > 0){
-      USER.accounts = data
+
+      for(let i = 0; i < data.length; i++){
+        let entry = data[i]
+        let eip = Object.keys(entry)
+        let pubkey = entry[eip]
+        let entryNew = {
+          pubkey,
+          eip:eip[0]
+        }
+        USER.accounts.push(entryNew)
+      }
     }
   } catch (e) {
     log.error('e: ', e)

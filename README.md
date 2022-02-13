@@ -1,4 +1,4 @@
-# Keepkey Client v2
+# ShapeShift DAO Web Interface
 
 (This is a development preview! This project is Under Development)
 
@@ -107,6 +107,18 @@ It also creates a html page you can interact with at the root level of the proje
 
 ```sh
     yarn test
+```
+
+Starts Cypress E2E testing with GUI.
+
+```
+yarn test:cypress
+```
+
+Or run Cypress headless
+
+```
+test:cypress:headless
 ```
 
 Builds the app for production to the `build` folder.<br /> It correctly bundles

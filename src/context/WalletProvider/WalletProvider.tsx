@@ -55,13 +55,21 @@ type GenericAdapter = {
 }
 
 type Adapters = Map<KeyManager, GenericAdapter>
+
+export type WalletInfo = {
+  name: string
+  icon: ComponentWithAs<'svg', IconProps>
+  deviceId: string
+  meta?: { label?: string; address?: string }
+}
+
 export interface InitialState {
   keyring: Keyring
   adapters: Adapters | null
   wallet: HDWallet | null
   type: KeyManager | null
   initialRoute: string | null
-  walletInfo: { name: string; icon: ComponentWithAs<'svg', IconProps>; deviceId: string } | null
+  walletInfo: WalletInfo | null
   isConnected: boolean
   modal: boolean
   keepkeyStatus: string | null
@@ -99,6 +107,7 @@ export interface IWalletContext {
   state: InitialState
   dispatch: React.Dispatch<ActionTypes>
   connect: (adapter: KeyManager) => Promise<void>
+  create: (adapter: KeyManager) => Promise<void>
   disconnect: () => void
   pioneer: any
 }
@@ -131,6 +140,7 @@ export type ActionTypes =
         name: string
         icon: ComponentWithAs<'svg', IconProps>
         deviceId: string
+        meta?: { label: string }
       }
     }
   | { type: WalletActions.SET_IS_CONNECTED; payload: boolean }
@@ -153,15 +163,20 @@ const reducer = (state: InitialState, action: ActionTypes) => {
       return { ...state, adapters: action.payload }
     case WalletActions.SET_WALLET:
       pioneer.pairWallet('keepkey', action.payload.wallet)
-      return {
+      const stateData = {
         ...state,
         wallet: action.payload.wallet,
         walletInfo: {
           name: action?.payload?.name,
           icon: action?.payload?.icon,
-          deviceId: action?.payload?.deviceId
+          deviceId: action?.payload?.deviceId,
+          meta: {
+            label: '', //TODO fixme
+            address: (action.payload.wallet as any).ethAddress ?? ''
+          }
         }
       }
+      return stateData
     case WalletActions.SET_IS_CONNECTED:
       return { ...state, isConnected: action.payload }
     case WalletActions.SET_CONNECTOR_TYPE:
@@ -404,14 +419,27 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }): JSX
     [state.keyring]
   )
 
+  const create = useCallback(async (type: KeyManager) => {
+    dispatch({ type: WalletActions.SET_CONNECTOR_TYPE, payload: type })
+    // const routeIndex = findIndex(SUPPORTED_WALLETS[type]?.routes, ({ path }) =>
+    //     String(path).endsWith('create')
+    // )
+    // if (routeIndex > -1) {
+    //   dispatch({
+    //     type: WalletActions.SET_INITIAL_ROUTE,
+    //     payload: SUPPORTED_WALLETS[type].routes[routeIndex].path as string
+    //   })
+    // }
+  }, [])
+
   const disconnect = useCallback(() => {
     state.wallet?.disconnect()
     dispatch({ type: WalletActions.RESET_STATE })
   }, [state.wallet])
 
   const value: IWalletContext = useMemo(
-    () => ({ state, dispatch, connect, disconnect, pioneer }),
-    [state, connect, disconnect, pioneer]
+    () => ({ state, dispatch, connect, disconnect, create, pioneer }),
+    [state, connect, disconnect, create, pioneer]
   )
 
   return (

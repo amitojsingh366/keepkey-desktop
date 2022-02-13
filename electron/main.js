@@ -387,12 +387,12 @@ ipcMain.on('onAccountInfo', async (event,data) => {
   const tag = TAG + ' | onAccountInfo | '
   try {
     console.log("data: ",data)
-    if(data.length > 0){
+    if(data.length > 0 && USER.accounts.length === 0){
 
       for(let i = 0; i < data.length; i++){
         let entry = data[i]
         let eip = Object.keys(entry)
-        let pubkey = entry[eip]
+        let pubkey = entry[eip[0]]
         let entryNew = {
           pubkey,
           eip:eip[0]

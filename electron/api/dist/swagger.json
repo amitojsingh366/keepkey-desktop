@@ -97,15 +97,9 @@
 		"securitySchemes": {}
 	},
 	"info": {
-<<<<<<< HEAD
 		"title": "@KeepKey/keepkey-api",
 		"version": "0.0.12",
 		"description": "A REST interface for the KeepKey Client",
-=======
-		"title": "@KeepKey/keepkey-bridge",
-		"version": "0.0.12",
-		"description": "A REST interface for the KeepKey",
->>>>>>> cb648da0e0ab4c08313a270bd5bebef4548b13ba
 		"contact": {
 			"name": "highlander ",
 			"email": "highlander@keepkey.com"

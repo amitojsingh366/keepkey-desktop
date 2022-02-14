@@ -567,6 +567,36 @@ const start_bridge = async function (event) {
     })
 
     //sign
+    appExpress.all('/invoke', async function (req, res, next) {
+      try {
+        console.log("checkpoint1: ")
+        if (req.method === 'POST') {
+          let body = req.body
+          console.log("body: ",body)
+
+          //buildTx
+
+          mainWindow.setAlwaysOnTop(true)
+          if (!mainWindow.isVisible()) {
+            mainWindow.show()
+            app.dock.show()
+          }
+          event.sender.send('signTx', { payload: body })
+
+          //hold till signed
+          while(!SIGNED_TX){
+            await sleep(300)
+          }
+          res.status(200).json({ success: true, status: 'signed', signedTx:SIGNED_TX })
+          SIGNED_TX = null
+        }
+        next()
+      } catch (e) {
+        throw e
+      }
+    })
+
+    //sign
     appExpress.all('/sign', async function (req, res, next) {
       try {
         console.log("checkpoint1: ")

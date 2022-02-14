@@ -3723,10 +3723,10 @@
     tiny-secp256k1 "^2.1.2"
     typescript "4.4"
 
-"@pioneer-sdk/coins@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@pioneer-sdk/coins/-/coins-0.0.5.tgz#d4c94072f25ccabab419013c2cb4d09afd199c69"
-  integrity sha512-jqEcBC5JPWFiIb985tkOnd8CHpCeJP8PhOyecSPumeS2LrWUWNL+DSmKqy6zqZZjCZfcMnpKz6TNMA53rJSygQ==
+"@pioneer-sdk/coins@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@pioneer-sdk/coins/-/coins-0.0.6.tgz#166961895028d9273963951f8fcacf7fe5d6ed2a"
+  integrity sha512-b6EKUMX2lKCoKBCgnXc/vnRPJAHbFIboS93c8IXLrcYCJugaH9qnJu9y/sj4yJ0+HgMmUGHjC8jt0HVi1tDA+A==
   dependencies:
     "@pioneer-platform/loggerdog" latest
     bech32 "^1.1.4"
@@ -3744,10 +3744,10 @@
     ripple-regex "^1.1.8"
     typescript "^4.5.5"
 
-"@pioneer-sdk/sdk@0.0.12":
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/@pioneer-sdk/sdk/-/sdk-0.0.12.tgz#890e7fac142e6a5ed2da0bc1de390ed4b8b51214"
-  integrity sha512-sVBiuFejORm5aXBF1qfF6cvmBUpRFgDcWSAjkhkh9zWFGefc935yqqv+kC1/C5gmNK3B0mfm0Rit8G1XLHcDfw==
+"@pioneer-sdk/sdk@0.0.13":
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/@pioneer-sdk/sdk/-/sdk-0.0.13.tgz#b152cd1b65942638cfffe0dd9d2605cc1c6873b8"
+  integrity sha512-ZOboOzG8NHWMa+RTgR7xcTryMIk5TW2JGdyK/N9qb3KhkzNDKC6Vbt0NUraUBLIwTpFdX/8EPtRcTKkqcT4elg==
   dependencies:
     "@babel/runtime" "^7.16.3"
     "@pioneer-platform/cosmos-tx-encoder" "0.0.3"
@@ -3756,8 +3756,8 @@
     "@pioneer-platform/pioneer-invoke" "^8.1.35"
     "@pioneer-platform/pioneer-tx-builder" "8.1.42"
     "@pioneer-platform/pioneer-types" "^8.1.48"
-    "@pioneer-sdk/coins" "^0.0.5"
-    "@pioneer-sdk/types" "^0.0.1"
+    "@pioneer-sdk/coins" "^0.0.6"
+    "@pioneer-sdk/types" "^0.0.2"
     "@shapeshiftoss/asset-service" "^1.7.4"
     "@shapeshiftoss/caip" "^1.4.2"
     "@shapeshiftoss/chain-adapters" "^1.22.1"
@@ -3782,10 +3782,12 @@
     ts-node "^9.1.1"
     typescript "4.4"
 
-"@pioneer-sdk/types@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@pioneer-sdk/types/-/types-0.0.1.tgz#3d012af8f0b270fa565c6b4fd51721409c805279"
-  integrity sha512-MXaiN9/RuG3zGjxUo/EgCmpM73IIai46Mo6MhG9zUqXueOUjIwGWvKUzuIC3xtM85uNlT5yZeLLX+lPeoLumeQ==
+"@pioneer-sdk/types@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@pioneer-sdk/types/-/types-0.0.2.tgz#7240fa5851e651f7e04d9a8fa30f8023b5eff207"
+  integrity sha512-YszkP/VgBHnPYs1JgynFPgqkgOmG4X0BjBLwHhzzvTDzoXEh6C+ZLG1JqHGPmi0YyxjDTusLhcjAfV9UC6e8tA==
+  dependencies:
+    typescript "4.4"
 
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.1", "@pmmmwh/react-refresh-webpack-plugin@^0.5.3":
   version "0.5.4"
